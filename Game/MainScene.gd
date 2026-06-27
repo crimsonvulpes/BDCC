@@ -35,6 +35,8 @@ var DrugDenRun:DrugDen
 var PS:PlayerSlaveryBase
 var PSH:PlayerSlaveryHolder = PlayerSlaveryHolder.new()
 var RCS:RecruitSystem = RecruitSystem.new()
+var MS:MissionSystem = MissionSystem.new()
+var MRH:MainRouteHistory = MainRouteHistory.new()
 
 var staticCharacters:Dictionary = {}
 var charactersToUpdate:Array = []
@@ -506,7 +508,7 @@ func saveData():
 	data["auctionBidders"] = SAB.saveData()
 	data["science"] = SCI.saveData()
 	data["playerSlaveryHolder"] = PSH.saveData()
-	#data["recruitSystem"] = RCS.saveData()
+	data["recruitSystem"] = RCS.saveData()
 	data["drugDen"] = DrugDenRun.saveData() if DrugDenRun != null else null
 	if(PS):
 		data["playerSlavery"] = {
@@ -515,6 +517,8 @@ func saveData():
 		}
 	else:
 		data["playerSlavery"] = null
+	data["missionSystem"] = MS.saveData()
+	data["mainRouteHistory"] = MRH.saveData()
 	
 	data["scenes"] = []
 	for scene in sceneStack:
@@ -555,8 +559,10 @@ func loadData(data):
 	SAB.loadData(SAVE.loadVar(data, "auctionBidders", {}))
 	SCI.loadData(SAVE.loadVar(data, "science", {}))
 	PSH.loadData(SAVE.loadVar(data, "playerSlaveryHolder", {}))
-	#RCS = RecruitSystem.new() # To reset all the state
-	#RCS.loadData(SAVE.loadVar(data, "recruitSystem", {}))
+	RCS = RecruitSystem.new() # To reset all the state
+	RCS.loadData(SAVE.loadVar(data, "recruitSystem", {}))
+	MS.loadData(SAVE.loadVar(data, "missionSystem", {}))
+	MRH.loadData(SAVE.loadVar(data, "mainRouteHistory", {}))
 	
 	var scenes = SAVE.loadVar(data, "scenes", [])
 	
@@ -1672,24 +1678,51 @@ func getDebugActions():
 			"args": [
 			],
 		},
-#		{
-#			"id": "startRecruit",
-#			"name": "Start recruit",
-#			"args": [
-#				{
-#					"id": "who",
-#					"name": "Who",
-#					"type": "list",
-#					"value": GM.main.RCS.recruits.keys()[0],
-#					"values": GM.main.RCS.getDebugActionOptions(),
-#				},
-#			],
-#		},
+		{
+			"id": "startRecruit",
+			"name": "Start recruit",
+			"args": [
+				{
+					"id": "who",
+					"name": "Who",
+					"type": "list",
+					"value": GM.main.RCS.recruits.keys()[0],
+					"values": GM.main.RCS.getDebugActionOptions(),
+				},
+			],
+		},
+		{
+			"id": "startMission",
+			"name": "Start mission",
+			"args": [
+				{
+					"id": "mission",
+					"name": "Mission",
+					"type": "list",
+					"value": GlobalRegistry.missions.keys()[0] if GlobalRegistry.missions.size() > 0 else "",
+					"values": MS.getDebugMissionList(),
+				},
+			],
+		},
+		{
+			"id": "allowMainRouteReset",
+			"name": "Allow Main Route reset",
+			"args": [
+			],
+		},
 	]
 
 func doDebugAction(id, args = {}):
 	print(id, " ", args)
 	
+	if(id == "allowMainRouteReset"):
+		GM.main.MRH.allowCanRestart(true)
+		return
+	if(id == "startMission"):
+		if(!MS.canStartAnyMission()):
+			MS.cancelCurrentMission()
+		MS.startMission(args["mission"])
+		return
 	if(id == "startRecruit"):
 		if(GM.main.RCS.hasCurrent()):
 			addMessage("Can't start a recruiting scene. Already recruiting someone!")
@@ -2373,3 +2406,15 @@ func checkPCOnALeash() -> bool: # Maybe I could expand this onto other pawn reac
 				return true
 	return false
 	
+# If this returns true, you shouldn't be able to agree to any new main routes
+func hasCommittedToMainRoute() -> bool:
+	if(getFlag("TaviModule.Tavi_Quest2Completed", false)):
+		return true
+	if(getFlag("KaitModule.joinedTeam", false)):
+		return true
+	
+	return false
+
+# If we have gotten to any ending, we can restart the main route
+func canRestartMainRoute() -> bool:
+	return MRH.canRestartMainRoute()

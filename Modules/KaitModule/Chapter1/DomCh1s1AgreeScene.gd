@@ -8,6 +8,7 @@ func _init():
 
 func _run():
 	if(state == ""):
+		GM.pc.setLocation("fight_announcer")
 		addCharacter("kait")
 		playAnimation(StageScene.Duo, "stand", {npc="kait"})
 		saynn("[say=pc]I think I might just accept your offer.[/say]")
@@ -441,7 +442,9 @@ func _react(_action: String, _args):
 
 	if(_action == "fake_out"):
 		processTime(5*60)
-		addMessage("Task added!")
+		setFlag("KaitModule.joinedTeam", true)
+		addMessage("Task updated!")
+		GM.main.applyAllWorldEdits()
 
 	setState(_action)
 

@@ -294,6 +294,8 @@ var npcOwnerEvents:Dictionary = {}
 var npcOwnerEventIDsByTag:Dictionary = {}
 var npcOwnerTraits:Dictionary = {}
 var recruits:Dictionary = {}
+var missions:Dictionary = {}
+var missionQuests:Dictionary = {}
 
 var bodypartStorageNode
 
@@ -629,6 +631,7 @@ func registerEverything():
 	
 	registerEventFolder("res://Events/Event/")
 	registerEventFolder("res://Game/NpcSlavery/SlaveActivitiesEvents/")
+	registerEventFolder("res://Game/DomRoute/MissionEvents/")
 	registerDrugDenEventFolder("res://Game/DrugDen/Events/")
 	
 	emit_signal("loadingUpdate", 7.0/totalStages, "Scenes")
@@ -644,7 +647,8 @@ func registerEverything():
 		registerSceneFolder("res://Scenes/Mineshaft/")
 		registerSceneFolder("res://Game/NpcSlavery/SlaveActionScenes/")
 		registerSceneFolder("res://Game/NpcSlavery/SlaveActionScenes/Prostitution/")
-		registerSceneFolder("res://Game/DomRoute/RecruitScenes/")
+		registerSceneFolderDeep("res://Game/DomRoute/RecruitScenes/")
+		registerSceneFolderDeep("res://Game/DomRoute/MissionScenes/")
 		
 		var end2 = OS.get_ticks_usec()
 		var worker_time2 = (end2-start2)/1000000.0
@@ -713,6 +717,7 @@ func registerEverything():
 	registerTransformationEffectsFolder("res://Game/Transformation/Effects/")
 	registerNurseryTaskFolder("res://Game/Science/NurseryTasks/")
 	registerRecruitFolder("res://Game/DomRoute/Recruits/")
+	registerMissionFolder("res://Game/DomRoute/Missions/")
 	
 	emit_signal("loadingUpdate", 11.0/totalStages, "Sex scenes")
 	yield(get_tree(), "idle_frame")
@@ -911,6 +916,11 @@ func registerSceneFolder(folder: String):
 			file_name = dir.get_next()
 	else:
 		Log.printerr("An error occurred when trying to access the path "+folder)
+
+func registerSceneFolderDeep(folder: String):
+	var scripts = getScriptsInFoldersRecursive(folder)
+	for scriptPath in scripts:
+		registerScene(scriptPath)
 
 func registerBodypart(path: String, _authorOverride:String = ""):
 	var bodypart = load(path)
@@ -2937,6 +2947,32 @@ func createRecruit(id: String):
 func getRecruits():
 	return recruits
 
+
+
+func registerMission(path: String):
+	var loadedClass = load(path)
+	var object = loadedClass.new()
+	
+	missions[object.id] = object
+	if(object.addAsAQuest):
+		var newQuest := MissionQuestProxy.new()
+		newQuest.mission = object
+		missionQuests[object.id] = newQuest
+
+func registerMissionFolder(folder: String):
+	var scripts = getScriptsInFoldersRecursive(folder)
+	for scriptPath in scripts:
+		registerMission(scriptPath)
+
+func getMission(id: String):
+	if(missions.has(id)):
+		return missions[id]
+	else:
+		Log.printerr("ERROR: mission with the id "+id+" wasn't found")
+		return null
+
+func getMissions():
+	return missions
 
 
 
