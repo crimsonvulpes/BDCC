@@ -1,0 +1,77 @@
+extends ItemBase
+
+func _init():
+	id = "LacePanties"
+	clothesColor = Color(0.19, 0.19, 0.19)
+
+func getVisibleName():
+	return "Lace panties"
+	
+func getDescription():
+	var text = "Sexy lace panties with a fancy pattern. These are sure to make anyone horny"
+
+	return text
+
+func getClothingSlot():
+	return InventorySlot.UnderwearBottom
+
+func getBuffs():
+	return [
+		buff(Buff.LustArmorBuff, [10]),
+		buff(Buff.StatBuff, [Stat.Sexiness, 5]),
+		]
+		
+func getPossibleActions():
+	if(!self.isWornByWearer() || self.isDamaged() || self.getWearer().isInventorySlotBlocked(InventorySlot.UnderwearBottom)):
+		return []
+	return [
+		{
+			"name": "Shift Clothes",
+			"scene": "ClothingAdjustState",
+			"description": "Change how your clothes are worn",
+		},
+	]
+
+func getTakingOffStringLong(withS):
+	if(withS):
+		return "slips down your lace panties"
+	else:
+		return "slip down your lace panties"
+
+func getPuttingOnStringLong(withS):
+	if(withS):
+		return "puts on the lace panties"
+	else:
+		return "put on the lace panties"
+
+func getPrice():
+	return 8
+
+func getTags():
+	return [
+		ItemTag.SoldByUnderwearVendomat,
+		]
+
+func generateItemState():
+	itemState = PantiesState.new()
+	itemState.canActuallyBeDamaged = true
+
+func getRiggedParts(_character):
+	if(itemState.isRemoved()):
+		return null
+	if(itemState.isDamaged()):
+		return {
+			"panties": "res://Modules/ClothingRevamp/Underwear/underwear_assets/Panties_Lace_dam.tscn",
+		}
+	if(itemState.arePantiesShiftedAside()):
+		return {"panties": "res://Modules/ClothingRevamp/Underwear/underwear_assets/Panties_Lace_pulledaside.tscn"}
+	
+	return {
+		"panties": "res://Modules/ClothingRevamp/Underwear/underwear_assets/Panties_Lace.tscn",
+	}
+
+func getInventoryImage():
+	return "res://Images/Items/underwear/lacepanties.png"
+
+func canDye():
+	return true
