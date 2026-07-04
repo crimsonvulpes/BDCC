@@ -1,0 +1,8 @@
+
+_crimson__lib:
+CrimsonLib
+Modules/Module.gd
+Modules/CrimsonLib
+
+_crimson:
+Modules/_crimson_chars

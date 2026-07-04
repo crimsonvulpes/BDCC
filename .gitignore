@@ -1,5 +1,8 @@
 # mod
+.crimson/saves.lnk
 AssetsSource/_crimson/_ref
+.crimson/char_saves
+.crimson/char_convert_out
 
 # Godot auto generated files
 *.gen.*

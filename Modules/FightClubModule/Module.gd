@@ -118,15 +118,18 @@ func _init():
 func register():
 	.register()
 	
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Rubi/RubiFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Volk/VolkFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Ferri/FerriFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Rebel/RebelFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Nova/NovaFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Axis/AxisFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Kait/KaitFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Jack/JackFighter.gd")
-	GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Avy/AvyFighter.gd")
+	var temp_file = Directory.new()
+	
+	if temp_file.dir_exists("res://Modules/FightClubModule/Fighters"):
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Rubi/RubiFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Volk/VolkFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Ferri/FerriFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Rebel/RebelFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Nova/NovaFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Axis/AxisFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Kait/KaitFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Jack/JackFighter.gd")
+		GlobalRegistry.registerFightClubFighter("res://Modules/FightClubModule/Fighters/Avy/AvyFighter.gd")
 
 func registerEventTriggers():
 	GM.ES.registerEventTrigger("ArenaFighterPCLost", EventTriggerLocation.new())

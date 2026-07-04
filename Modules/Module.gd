@@ -66,7 +66,9 @@ func register():
 		GlobalRegistry.registerScene(scene, author)
 	
 	for character in characters:
-		GlobalRegistry.registerCharacter(character)
+		var temp_file = File.new()
+		if temp_file.file_exists(character):
+			GlobalRegistry.registerCharacter(character)
 	
 	for item in items:
 		GlobalRegistry.registerItem(item)
