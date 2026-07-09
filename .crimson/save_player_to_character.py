@@ -179,7 +179,7 @@ print("\n\nCurrent char saves (GAMEROOT/.crimson/char_saves)")
 char_saves = []
 if os.path.exists("char_saves"):
     for file in os.listdir("char_saves"):
-        if os.path.isfile(f"charsaves\\{file}"):
+        if os.path.isfile(f"char_saves\\{file}"):
             print(file)
             char_saves.append(file[:-5])
 
