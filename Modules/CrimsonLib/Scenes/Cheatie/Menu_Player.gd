@@ -18,6 +18,7 @@ func _run():
 
 	if (state == ""):
 		addButton("Inventory", "", "player_inventory")
+		addButton("Restraints", "Restraints", "player_restraints")
 		addButton("Fill Log", "See who has came inside you.. their cum has to still be in any hole tho.", "player_checkcame")
 		addButton("Skills", "Test", "skills")
 		
@@ -42,6 +43,16 @@ func _run():
 		addButton("Items", "Seperated from this menu. Because its alot of shit.", "inventorysub")
 		addButton("Item Contents", "Stuff like Penis Pump contents", "inventory_contents")
 
+	if (state == "player_restraints"):
+		
+		addButton("Back", "Back to main", "")
+		
+		for item in FoxyBusiness.getPlayerRestraints():
+			# you need to keep your DAMN COLLAR ON!!!
+			if not "collar" in item.id:
+				addButton(item.getVisibleName(), "Remove this restraint", "remove_restraint", [item])
+		
+		
 	if (state == "inventory_contents"):
 		var _strapon = GM.pc.getWornStrapon()
 		var _condom = GM.pc.getWornCondom()
@@ -93,6 +104,13 @@ func _react(_action: String, _args):
 		_item = _args[0].uniqueID
 		return
 	
+	if (_action == "remove_restraint"):
+		var item = _args[0]
+		
+		FoxyBusiness.removeRestraint(item)
+		GM.main.addMessage("Removed restraint " + item.getVisibleName())
+		return
+	
 	if (_action == "inventory_add"):
 		if _args[0] == "all":
 			for item in GlobalRegistry.getItemRefs():
@@ -140,13 +158,14 @@ func getContents_CheckCame():
 	
 	var anusOrifice: Orifice = _pcAnus.getOrifice()
 	var kittyOrifice: Orifice = null
+	var orificeData_Kitty = null
 	
 	if _pcKitty != null:
 		kittyOrifice = _pcKitty.getOrifice()
+		orificeData_Kitty = kittyOrifice.saveData()
 		
 	var headOrifice: Orifice = _pcHead.getOrifice()
 	var orificeData_Anus = anusOrifice.saveData()
-	var orificeData_Kitty = kittyOrifice.saveData()
 	var orificeData_Head = headOrifice.saveData()
 
 

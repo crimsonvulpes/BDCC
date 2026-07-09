@@ -1,6 +1,6 @@
 #extends Module
 extends "res://FoxLib/FoxModule.gd"
-class_name Fox2Module
+class_name CrimsonModule
 
 # You modify these, depending what you need to be logged that's missing.
 var log_missing = {

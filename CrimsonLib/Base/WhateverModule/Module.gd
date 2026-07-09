@@ -1,4 +1,4 @@
-extends "res://FoxLib2/Fox2Module.gd"
+extends "res://CrimsonLib/CrimsonModule.gd"
 
 func setLogs():
 	_setLog("skins", true)

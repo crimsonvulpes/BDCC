@@ -1,5 +1,5 @@
 extends Object
-class_name FoxConsole
+class_name CrimsonConsole
 
 static func Log(message):
 	Log.print("[FoxLib] " + message)

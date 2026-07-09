@@ -1,4 +1,4 @@
-extends "res://CrimsonLib/Fox2Module.gd"
+extends "res://CrimsonLib/CrimsonModule.gd"
 
 var cheatie
 var showLikedCharacters
@@ -35,3 +35,5 @@ func register():
 	# Floors
 	GlobalRegistry.registerMapFloor("crimsonlib_cheat_floor", path+"/Floors/Test.tscn")
 	
+	var a = FoxyBusiness.new()
+	a.makeCrimsonCfg()

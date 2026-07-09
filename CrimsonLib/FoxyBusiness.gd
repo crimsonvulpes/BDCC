@@ -3,10 +3,10 @@
 extends Object
 class_name FoxyBusiness
 
-var other_config = "user://crimsonvulpes/other_config.json"
+const other_config = "user://crimsonvulpes/other_config.json"
 
 #OTHER
-var defaultJson = {
+const defaultJson = {
 	"likedChars": [
 		"alexrynard",
 		"purpfox"
@@ -17,8 +17,39 @@ static func getValue(dict, entry, _default):
 	if dict.has(entry):
 		return dict.get(entry)
 	return _default
+
+static func doesPlayerHaveRestraintsOn():
+	var player = GM.pc
 	
-func setDefaultJson():
+	if player.inventory.getEquippedRestraints().size() > 0:
+		return true
+	return false
+
+static func getPlayerRestraints():
+	var player = GM.pc
+	
+	if doesPlayerHaveRestraintsOn():
+		return player.inventory.getEquippedRestraints()
+	return []
+
+static func removeRestraint(restraint):
+	var player = GM.pc
+	
+	if doesPlayerHaveRestraintsOn():
+		player.inventory.unequipItem(restraint)
+	pass
+
+static func removeRestraints():
+	var player = GM.pc
+	
+	if doesPlayerHaveRestraintsOn():
+		for item in getPlayerRestraints():
+			#if item.isRestraint():
+			player.inventory.unequipItem(item)
+	pass
+	
+
+static func setDefaultJson():
 	var file = File.new()
 	
 	if file.open(other_config, File.WRITE) == OK:
@@ -26,10 +57,10 @@ func setDefaultJson():
 		var json_string = JSON.print(data)
 		file.store_string(json_string)
 		file.close()
-		FoxConsole.Log("Success! File saved at: " + other_config)
+		CrimsonConsole.Log("Success! File saved at: " + other_config)
 		return true
 	else:
-		FoxConsole.Log("Failed to open file for writing.")
+		CrimsonConsole.Log("Failed to open file for writing.")
 
 func makeCrimsonCfg():
 	var file = File.new()
@@ -41,12 +72,12 @@ func makeCrimsonCfg():
 		if file.open(other_config, File.READ) != OK:
 			var succeed = setDefaultJson()
 			if !succeed:
-				FoxConsole.Error("setDefaultJson failed!")
+				CrimsonConsole.Error("setDefaultJson failed!")
 				return false
 				
-			FoxConsole.Log("default json was successful")
+			CrimsonConsole.Log("default json was successful")
 		else:
-			FoxConsole.Log("config exists, get content")
+			CrimsonConsole.Log("config exists, get content")
 			var _content = file.get_as_text()
 			file.close()
 
@@ -64,11 +95,11 @@ func getLikedChars():
 			likedChars = json_data["likedChars"]
 		else:
 			var succeed = setDefaultJson()
-			FoxConsole.Log("parsing error, attempting to set default json")
+			CrimsonConsole.Log("parsing error, attempting to set default json")
 			if !succeed:
-				FoxConsole.Error("getLikedChars failed!")
+				CrimsonConsole.Error("getLikedChars failed!")
 				return false
-			FoxConsole.Log("default json was successful")
+			CrimsonConsole.Log("default json was successful")
 			likedChars = defaultJson
 		return likedChars
 		

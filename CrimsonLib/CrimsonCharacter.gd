@@ -84,11 +84,13 @@ func _register():
 	
 	## Fucking dumb null checks.. (was very dumb before.. many if statments)
 	npcSkinData = FoxyBusiness.getValue(_skinData, "skinData", {})
+	print("YTOOOOED")
+	print(npcSkinData)
 	pickedSkin = FoxyBusiness.getValue(_skinData, "pickedSkin", "EmptySkin")
 	pickedSkinRColor = FoxyBusiness.getValue(_skinData, "pickedSkinRColor", Color.white)
 	pickedSkinGColor = FoxyBusiness.getValue(_skinData, "pickedSkinGColor", Color.lightgray)
 	pickedSkinBColor = FoxyBusiness.getValue(_skinData, "pickedSkinBColor", Color.darkgray)
-		
+	
 
 func _setBodyparts():
 	pass
@@ -102,7 +104,6 @@ func createBodyparts():
 				var benis = GlobalRegistry.createBodypart(_bodyparts[partType])
 				var scale:float = FoxyBusiness.getValue(_data, "ballsScale", 0.5)
 				benis.lengthCM = FoxyBusiness.getValue(_data, "penisSize", 18)
-				print(scale)
 				benis.ballsScale = scale
 			elif partType == "breasts":
 				var breast = GlobalRegistry.createBodypart(_bodyparts[partType])
@@ -124,4 +125,4 @@ func getFluidType(_fluidSource):
 		if typeof(_fluidType) == TYPE_STRING:
 			return _fluidType
 		else:
-			FoxConsole.Log("fluidType is not a string... value is '" + _fluidType)
+			CrimsonConsole.Log("fluidType is not a string... value is '" + _fluidType)

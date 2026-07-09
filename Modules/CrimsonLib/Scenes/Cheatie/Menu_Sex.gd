@@ -1,5 +1,6 @@
 extends "res://CrimsonLib/Base/CheatMenu.gd"
 
+var savedPage:int = 0
 var foxybusiness = preload("res://CrimsonLib/FoxyBusiness.gd").new()
 var pickedPoolToShow = ""
 var selectedCharacter = ""
@@ -14,12 +15,14 @@ func _init():
 	crimsonLib = Globals.ofModule("CrimsonLib")
 
 func _run():
+	print(state)
 	._run()
 	sayn("Sex\n")
 	
 	if (state == ""):
 		saynn("Go to the characters menu (by the characters button) and select a character.\n\nNote: There is previews to see if you like the cutie")
-
+		savedPage = 0
+		
 		if selectedCharacter != "":
 			addButton("Start", "Start sex. select normal, stocks, slutwall.", "sex_start")
 		else:
@@ -84,10 +87,11 @@ func _run():
 				var likedChars = foxybusiness.getLikedChars()
 				
 				for character in likedChars:
-					var actChar = GlobalRegistry.getCharacter(character)
-					var charName = actChar.getName()
-					addButton(charName, "", "sex_character", ["fully clothed", character])
-					addButton(charName + " - nude", "", "sex_character", ["nude", character])
+					if GlobalRegistry.getCharacter(character) != null:
+						var actChar = GlobalRegistry.getCharacter(character)
+						var charName = actChar.getName()
+						addButton(charName, "", "sex_character", ["fully clothed", character])
+						addButton(charName + " - nude", "", "sex_character", ["nude", character])
 			elif (state == "sex_characters_modules"):
 				# addButton(, "Character", "sex_character_select")
 				for character in GlobalRegistry.getCharacters():
@@ -121,8 +125,14 @@ func _run():
 		playAnimation(StageScene.Duo, "", animArgs)
 
 	
+	if(savedPage != 0):
+		print("SAVED PAGE")
+		GM.ui.setCurrentPage(savedPage)
+		
 func _react(_action: String, _args):
 	._react(_action, _args)
+	savedPage = GM.ui.getCurrentPage()
+	print(savedPage)
 	
 	if(_action == "sex_characters_dynamicnpc_occupation"):
 		pickedPoolToShow = _args[0]
@@ -148,10 +158,10 @@ func _react(_action: String, _args):
 func saveData():
 	var data = .saveData()
 	
-	data["from_floor"] = from_floor
 	data["pickedPoolToShow"] = pickedPoolToShow
 	data["selectedCharacter"] = selectedCharacter
 	data["animArgs"] = animArgs
+	data["savedPage"] = savedPage
 
 	# addMessage("Current Sex Character: " + selectedCharacter)
 
@@ -159,8 +169,9 @@ func saveData():
 	
 func loadData(data):
 	.loadData(data)
+	print(data)
 	
-	from_floor = SAVE.loadVar(data, "from_floor", false)
 	pickedPoolToShow = SAVE.loadVar(data, "pickedPoolToShow", "")
 	selectedCharacter = SAVE.loadVar(data, "selectedCharacter", "")
 	animArgs = SAVE.loadVar(data, "animArgs", {})
+	savedPage = SAVE.loadVar(data, "savedPage", 0)
