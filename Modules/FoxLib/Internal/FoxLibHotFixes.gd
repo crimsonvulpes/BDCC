@@ -27,14 +27,14 @@ func computeHotfixes(foxLib):
 	# Fix some Hypertus bodyparts overrides
 	if foxLib.hasModFile("Modules/Z_Hypertus/Module.gd"):
 		if foxLib.hasModFile("Modules/Z_Hypertus/compatibilityLayers/CaninePussy/CaninePussy.gd"):
-			bodypartChecks.append(["caninepussyhyperable", "res://Modules/Z_Hypertus/compatibilityLayers/CaninePussy/CaninePussy.gd"])
+			bodypartChecks.append(["caninepussy", "res://Modules/Z_Hypertus/compatibilityLayers/CaninePussy/CaninePussy.gd"])
 		if foxLib.hasModFile("Modules/Z_Hypertus/compatibilityLayers/EquinePussy/EquinePussy.gd"):
-			bodypartChecks.append(["equinepussyhyperable", "res://Modules/Z_Hypertus/compatibilityLayers/EquinePussy/EquinePussy.gd"])
+			bodypartChecks.append(["equinepussy", "res://Modules/Z_Hypertus/compatibilityLayers/EquinePussy/EquinePussy.gd"])
 		if foxLib.hasModFile("Modules/FluffBodyPartsV3/Bodyparts/FluffBreasts/FluffBreasts.tscn"):
 			if foxLib.hasModFile("Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffBreasts.gd"):
-				bodypartChecks.append(["fluffbreastshyperable", "res://Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffBreasts.gd"])
+				bodypartChecks.append(["fluffbreasts", "res://Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffBreasts.gd"])
 			if foxLib.hasModFile("Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffMaleBreasts.gd"):
-				bodypartChecks.append(["fluffmalebreastshyperable", "res://Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffMaleBreasts.gd"])
+				bodypartChecks.append(["fluffmalebreasts", "res://Modules/Z_Hypertus/Bodyparts/Breasts/CompactLayer/FluffMaleBreasts.gd"])
 
 func applyHotfixes():
 	for moduleFile in forceLateReInit:

@@ -1,4 +1,4 @@
-extends "res://CrimsonLib/Fox2Module.gd"
+extends "res://CrimsonLib/CrimsonModule.gd"
 
 func setLogs():
 	_setLog("characters", true)
