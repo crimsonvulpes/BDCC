@@ -125,7 +125,6 @@ func _react(_action: String, _args):
 func saveData():
 	var data = .saveData()
 	
-	data["from_floor"] = from_floor
 	data["item"] = _item
 
 	# addMessage("Current Sex Character: " + selectedCharacter)
@@ -135,7 +134,6 @@ func saveData():
 func loadData(data):
 	.loadData(data)
 	
-	from_floor = SAVE.loadVar(data, "from_floor", false)
 	_item = SAVE.loadVar(data, "item", "")
 
 ## Misc
